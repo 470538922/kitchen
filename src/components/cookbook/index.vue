@@ -145,7 +145,7 @@ export default {
         baseimg: this.erweima
       });
       this.axios
-        .post("http://192.168.1.182:8041/history/xiazai", value, {
+        .post(this.global.apiSrc + "/api-recipe/recipe/xiazai", value, {
           responseType: "blob" // 设置响应数据类型
           //   headers: { "Content-Type": "application/json" }
         })
@@ -169,7 +169,7 @@ export default {
     },
     shoWerweima(index, row) {
       this.axios
-        .get("http://192.168.1.182:8041/history/test?id=" + row.id)
+        .get(this.global.apiSrc + "/api-recipe/recipe/backQrCode?id=" + row.id)
         .then(res => {
           if (res.data.code === 200) {
             this.fileName = row.recipeName;

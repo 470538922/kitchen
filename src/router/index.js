@@ -81,915 +81,951 @@ import EnterpriseAuditedIndex from '@/components/enterpriseAudited/index'
 import EnterpriseAuditedEdit from '@/components/enterpriseAudited/Edit'
 import Temporary from '@/components/temporary/index'
 import PrefabricatedRecipes from '@/components/cookbook/PrefabricatedRecipes'
+import lifeCycle from '@/components/dataAnalysis/lifeCycle/index'
+import menuAnalysis from '@/components/dataAnalysis/menuAnalysis/index'
+import remoteDiagnosis from '@/components/dataAnalysis/remoteDiagnosis/index'
 Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [{
-      path: '/',
-      redirect: '/AdminSimpleHome',
+    path: '/',
+    redirect: '/AdminSimpleHome',
+  },
+  {
+    path: '/EnterpriseAuditedIndex',
+    name: 'EnterpriseAuditedIndex',
+    component: EnterpriseAuditedIndex,
+    props: {
+      pageName: '审核'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'EnterpriseAuditedEdit/:id/',
+      name: 'EnterpriseAuditedEdit',
+      component: EnterpriseAuditedEdit,
+      props: {
+        pageName: '修改注册'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/Article',
+    name: 'Article',
+    component: Article,
+    props: {
+      pageName: '文章列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'ArticleAdd',
+      name: 'ArticleAdd',
+      component: ArticleAdd,
+      props: {
+        pageName: '添加文章'
+      },
+      meta: {
+        requireAuth: true,
+      },
     },
     {
-      path: '/EnterpriseAuditedIndex',
-      name: 'EnterpriseAuditedIndex',
-      component: EnterpriseAuditedIndex,
+      path: 'ArticleEdit/:id/',
+      name: 'ArticleEdit',
+      component: ArticleEdit,
+      props: {
+        pageName: '修改文章'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }
+    ]
+  },
+  {
+    path: '/Manufacturer',
+    name: 'Manufacturer',
+    component: Manufacturer,
+    props: {
+      pageName: '设备厂商'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'ManufacturerDetails/:id/',
+      name: 'ManufacturerDetails',
+      component: ManufacturerDetails,
+      props: {
+        pageName: '查看详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }, {
+      path: 'ManufacturerAudit/:id/',
+      name: 'ManufacturerAudit',
+      component: ManufacturerAudit,
       props: {
         pageName: '审核'
       },
       meta: {
         requireAuth: true,
       },
-      children: [{
-        path: 'EnterpriseAuditedEdit/:id/',
-        name: 'EnterpriseAuditedEdit',
-        component: EnterpriseAuditedEdit,
-        props: {
-          pageName: '修改注册'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
+    },]
+  },
+  {
+    path: '/Merchant',
+    name: 'Merchant',
+    component: Merchant,
+    props: {
+      pageName: '商家'
     },
-    {
-      path: '/Article',
-      name: 'Article',
-      component: Article,
-      props: {
-        pageName: '文章列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'ArticleAdd',
-          name: 'ArticleAdd',
-          component: ArticleAdd,
-          props: {
-            pageName: '添加文章'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'ArticleEdit/:id/',
-          name: 'ArticleEdit',
-          component: ArticleEdit,
-          props: {
-            pageName: '修改文章'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/Manufacturer',
-      name: 'Manufacturer',
-      component: Manufacturer,
+    children: [{
+      path: 'MerchantDetails/:id/',
+      name: 'MerchantDetails',
+      component: MerchantDetails,
       props: {
-        pageName: '设备厂商'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'ManufacturerDetails/:id/',
-        name: 'ManufacturerDetails',
-        component: ManufacturerDetails,
-        props: {
-          pageName: '查看详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, {
-        path: 'ManufacturerAudit/:id/',
-        name: 'ManufacturerAudit',
-        component: ManufacturerAudit,
-        props: {
-          pageName: '审核'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/Merchant',
-      name: 'Merchant',
-      component: Merchant,
-      props: {
-        pageName: '商家'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'MerchantDetails/:id/',
-          name: 'MerchantDetails',
-          component: MerchantDetails,
-          props: {
-            pageName: '查看详情'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'MerchantAudit/:id/',
-          name: 'MerchantAudit',
-          component: MerchantAudit,
-          props: {
-            pageName: '审核'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-      ]
-    },
-    {
-      path: '/Monitoring',
-      name: 'Monitoring',
-      component: Monitoring,
-      props: {
-        pageName: '实时监控'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: []
-    },
-    {
-      path: '/DataAnalysis',
-      name: 'DataAnalysis',
-      component: DataAnalysis,
-      props: {
-        pageName: '数据分析'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: []
-    },
-    {
-      path: '/DeviceOfThings',
-      name: 'DeviceOfThings',
-      component: DeviceOfThings,
-      props: {
-        pageName: '物联设备'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'DeviceOfThingsDetails/:id/',
-        name: 'DeviceOfThingsDetails',
-        component: DeviceOfThingsDetails,
-        props: {
-          pageName: '设备详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/AdminDataAnalysis',
-      name: 'AdminDataAnalysis',
-      component: AdminDataAnalysis,
-      props: {
-        pageName: '数据分析'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: []
-    },
-    {
-      path: '/AdminMonitoring',
-      name: 'AdminMonitoring',
-      component: AdminMonitoring,
-      props: {
-        pageName: '实时监控'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: []
-    },
-    {
-      path: '/AdminProductOfThings',
-      name: 'AdminProductOfThings',
-      component: AdminProductOfThings,
-      props: {
-        pageName: '物联产品'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'AdminProductOfThingsDetails/:id/',
-        name: 'AdminProductOfThingsDetails',
-        component: AdminProductOfThingsDetails,
-        props: {
-          pageName: '产品详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, {
-        path: 'AdminProductOfThingsAudit/:id/',
-        name: 'AdminProductOfThingsAudit',
-        component: AdminProductOfThingsAudit,
-        props: {
-          pageName: '产品审核'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/ProductOfThings',
-      name: 'ProductOfThings',
-      component: ProductOfThings,
-      props: {
-        pageName: '物联产品'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'ProductOfThingsAdd',
-          name: 'ProductOfThingsAdd',
-          component: ProductOfThingsAdd,
-          props: {
-            pageName: '产品添加'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'ProductOfThingsEdit/:id/',
-          name: 'ProductOfThingsEdit',
-          component: ProductOfThingsEdit,
-          props: {
-            pageName: '产品修改'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'ProductOfThingsDetails/:id/',
-          name: 'ProductOfThingsDetails',
-          component: ProductOfThingsDetails,
-          props: {
-            pageName: '产品详情'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-      ]
-    },
-    {
-      path: '/AdminDeviceOfThings',
-      name: 'AdminDeviceOfThings',
-      component: AdminDeviceOfThings,
-      props: {
-        pageName: '物联设备'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'AdminDeviceOfThingsDetails/:id/',
-        name: 'AdminDeviceOfThingsDetails',
-        component: AdminDeviceOfThingsDetails,
-        props: {
-          pageName: '设备详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/CookingPackage',
-      name: 'CookingPackage',
-      component: CookingPackage,
-      props: {
-        pageName: '菜谱包列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'AddCookingPackage',
-          name: 'AddCookingPackage',
-          component: AddCookingPackage,
-          props: {
-            pageName: '添加菜谱包'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditCookingPackage/:id/',
-          name: 'EditCookingPackage',
-          component: EditCookingPackage,
-          props: {
-            pageName: '修改菜谱包'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
-    },
-    {
-      path: '/Home',
-      name: 'Home',
-      component: Home,
-      props: {
-        pageName: '主页'
+        pageName: '查看详情'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/Security',
-      name: 'Security',
-      component: Security,
+      path: 'MerchantAudit/:id/',
+      name: 'MerchantAudit',
+      component: MerchantAudit,
       props: {
-        pageName: '安全设置'
+        pageName: '审核'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    ]
+  },
+  {
+    path: '/Monitoring',
+    name: 'Monitoring',
+    component: Monitoring,
+    props: {
+      pageName: '实时监控'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: []
+  },
+  {
+    path: '/DataAnalysis',
+    name: 'DataAnalysis',
+    component: DataAnalysis,
+    props: {
+      pageName: '数据分析'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: []
+  },
+  {
+    path: '/DeviceOfThings',
+    name: 'DeviceOfThings',
+    component: DeviceOfThings,
+    props: {
+      pageName: '物联设备'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'DeviceOfThingsDetails/:id/',
+      name: 'DeviceOfThingsDetails',
+      component: DeviceOfThingsDetails,
+      props: {
+        pageName: '设备详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/AdminDataAnalysis',
+    name: 'AdminDataAnalysis',
+    component: AdminDataAnalysis,
+    props: {
+      pageName: '数据分析'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: []
+  },
+  {
+    path: '/AdminMonitoring',
+    name: 'AdminMonitoring',
+    component: AdminMonitoring,
+    props: {
+      pageName: '实时监控'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: []
+  },
+  {
+    path: '/AdminProductOfThings',
+    name: 'AdminProductOfThings',
+    component: AdminProductOfThings,
+    props: {
+      pageName: '物联产品'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AdminProductOfThingsDetails/:id/',
+      name: 'AdminProductOfThingsDetails',
+      component: AdminProductOfThingsDetails,
+      props: {
+        pageName: '产品详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }, {
+      path: 'AdminProductOfThingsAudit/:id/',
+      name: 'AdminProductOfThingsAudit',
+      component: AdminProductOfThingsAudit,
+      props: {
+        pageName: '产品审核'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/ProductOfThings',
+    name: 'ProductOfThings',
+    component: ProductOfThings,
+    props: {
+      pageName: '物联产品'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'ProductOfThingsAdd',
+      name: 'ProductOfThingsAdd',
+      component: ProductOfThingsAdd,
+      props: {
+        pageName: '产品添加'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/DiscountCoupon',
-      name: 'DiscountCoupon',
-      component: DiscountCoupon,
+      path: 'ProductOfThingsEdit/:id/',
+      name: 'ProductOfThingsEdit',
+      component: ProductOfThingsEdit,
       props: {
-        pageName: '优惠券'
+        pageName: '产品修改'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/Integral',
-      name: 'Integral',
-      component: Integral,
+      path: 'ProductOfThingsDetails/:id/',
+      name: 'ProductOfThingsDetails',
+      component: ProductOfThingsDetails,
       props: {
-        pageName: '积分明细'
+        pageName: '产品详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    ]
+  },
+  {
+    path: '/AdminDeviceOfThings',
+    name: 'AdminDeviceOfThings',
+    component: AdminDeviceOfThings,
+    props: {
+      pageName: '物联设备'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AdminDeviceOfThingsDetails/:id/',
+      name: 'AdminDeviceOfThingsDetails',
+      component: AdminDeviceOfThingsDetails,
+      props: {
+        pageName: '设备详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/CookingPackage',
+    name: 'CookingPackage',
+    component: CookingPackage,
+    props: {
+      pageName: '菜谱包列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddCookingPackage',
+      name: 'AddCookingPackage',
+      component: AddCookingPackage,
+      props: {
+        pageName: '添加菜谱包'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/AdminDiscountCoupon',
-      name: 'AdminDiscountCoupon',
-      component: AdminDiscountCoupon,
+      path: 'EditCookingPackage/:id/',
+      name: 'EditCookingPackage',
+      component: EditCookingPackage,
       props: {
-        pageName: '优惠券'
+        pageName: '修改菜谱包'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }
+    ]
+  },
+  {
+    path: '/Home',
+    name: 'Home',
+    component: Home,
+    props: {
+      pageName: '主页'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Security',
+    name: 'Security',
+    component: Security,
+    props: {
+      pageName: '安全设置'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/DiscountCoupon',
+    name: 'DiscountCoupon',
+    component: DiscountCoupon,
+    props: {
+      pageName: '优惠券'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Integral',
+    name: 'Integral',
+    component: Integral,
+    props: {
+      pageName: '积分明细'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/AdminDiscountCoupon',
+    name: 'AdminDiscountCoupon',
+    component: AdminDiscountCoupon,
+    props: {
+      pageName: '优惠券'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/AdminRedPacket',
+    name: 'AdminRedPacket',
+    component: AdminRedPacket,
+    props: {
+      pageName: '红包'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/RedPacket',
+    name: 'RedPacket',
+    component: RedPacket,
+    props: {
+      pageName: '红包'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/AdminHome',
+    name: 'AdminHome',
+    component: AdminHome,
+    props: {
+      pageName: '主页'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/AdminSimpleHome',
+    name: 'AdminSimpleHome',
+    component: AdminSimpleHome,
+    props: {
+      pageName: '主页'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Order',
+    name: 'Order',
+    component: Order,
+    props: {
+      pageName: '订单列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'Details/:id/',
+      name: 'Details',
+      component: Details,
+      props: {
+        pageName: '订单详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/AdminOrder',
+    name: 'AdminOrder',
+    component: AdminOrder,
+    props: {
+      pageName: '订单列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AdminDetails/:id/',
+      name: 'AdminDetails',
+      component: AdminDetails,
+      props: {
+        pageName: '订单详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/Store',
+    name: 'Store',
+    component: Store,
+    props: {
+      pageName: '商品列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddMenu',
+      name: 'AddMenu',
+      component: AddMenu,
+      props: {
+        pageName: '添加商品'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/AdminRedPacket',
-      name: 'AdminRedPacket',
-      component: AdminRedPacket,
+      path: 'EditMenu/:id/',
+      name: 'EditMenu',
+      component: EditMenu,
       props: {
-        pageName: '红包'
+        pageName: '修改商品'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    ]
+  },
+  {
+    path: '/AdminStore',
+    name: 'AdminStore',
+    component: AdminStore,
+    props: {
+      pageName: '商品列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AdminStoreDetails/:id/',
+      name: 'AdminStoreDetails',
+      component: AdminStoreDetails,
+      props: {
+        pageName: '修改商品'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/Classify',
+    name: 'Classify',
+    component: Classify,
+    props: {
+      pageName: '商品分类'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Service',
+    name: 'Service',
+    component: Service,
+    props: {
+      pageName: '服务网点'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Supplier',
+    name: 'Supplier',
+    component: Supplier,
+    props: {
+      pageName: '代理商'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddSupplier',
+      name: 'AddSupplier',
+      component: AddSupplier,
+      props: {
+        pageName: '添加代理商'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/RedPacket',
-      name: 'RedPacket',
-      component: RedPacket,
+      path: 'EditSupplier/:id',
+      name: 'EditSupplier',
+      component: EditSupplier,
       props: {
-        pageName: '红包'
+        pageName: '修改代理商'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }
+    ]
+  },
+  {
+    path: '/Distributor',
+    name: 'Distributor',
+    component: Distributor,
+    props: {
+      pageName: '供应商'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddDistributor',
+      name: 'AddDistributor',
+      component: AddDistributor,
+      props: {
+        pageName: '添加供应商'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/AdminHome',
-      name: 'AdminHome',
-      component: AdminHome,
+      path: 'EditDistributor/:id',
+      name: 'EditDistributor',
+      component: EditDistributor,
       props: {
-        pageName: '主页'
+        pageName: '修改供应商'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }
+    ]
+  },
+  {
+    path: '/Administrator',
+    name: 'Administrator',
+    component: Administrator,
+    props: {
+      pageName: '管理员列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/MerchantSystem',
+    name: 'MerchantSystem',
+    component: MerchantSystem,
+    props: {
+      pageName: '商城设置'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/System',
+    name: 'System',
+    component: System,
+    props: {
+      pageName: '系统设置'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/SystemLog',
+    name: 'SystemLog',
+    component: SystemLog,
+    props: {
+      pageName: '系统日志'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Agreement',
+    name: 'Agreement',
+    component: Agreement,
+    props: {
+      pageName: '用户协议'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/RoleManagement',
+    name: 'RoleManagement',
+    component: RoleManagement,
+    props: {
+      pageName: '角色管理'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddRole',
+      name: 'AddRole',
+      component: AddRole,
+      props: {
+        pageName: '添加角色'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/AdminSimpleHome',
-      name: 'AdminSimpleHome',
-      component: AdminSimpleHome,
+      path: 'EditRole/:id/',
+      name: 'EditRole',
+      component: EditRole,
       props: {
-        pageName: '主页'
+        pageName: '修改角色'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }
+    ]
+  },
+  {
+    path: '/CookbookClassify',
+    name: 'CookbookClassify',
+    component: CookbookClassify,
+    props: {
+      pageName: '菜谱分类'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Cookbook',
+    name: 'Cookbook',
+    component: Cookbook,
+    props: {
+      pageName: '菜谱列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AddCookbook',
+      name: 'AddCookbook',
+      component: AddCookbook,
+      props: {
+        pageName: '添加菜谱'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/Order',
-      name: 'Order',
-      component: Order,
+      path: 'EditCookbook/:id',
+      name: 'EditCookbook',
+      component: EditCookbook,
       props: {
-        pageName: '订单列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'Details/:id/',
-        name: 'Details',
-        component: Details,
-        props: {
-          pageName: '订单详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/AdminOrder',
-      name: 'AdminOrder',
-      component: AdminOrder,
-      props: {
-        pageName: '订单列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'AdminDetails/:id/',
-        name: 'AdminDetails',
-        component: AdminDetails,
-        props: {
-          pageName: '订单详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/Store',
-      name: 'Store',
-      component: Store,
-      props: {
-        pageName: '商品列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'AddMenu',
-          name: 'AddMenu',
-          component: AddMenu,
-          props: {
-            pageName: '添加商品'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditMenu/:id/',
-          name: 'EditMenu',
-          component: EditMenu,
-          props: {
-            pageName: '修改商品'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-      ]
-    },
-    {
-      path: '/AdminStore',
-      name: 'AdminStore',
-      component: AdminStore,
-      props: {
-        pageName: '商品列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'AdminStoreDetails/:id/',
-        name: 'AdminStoreDetails',
-        component: AdminStoreDetails,
-        props: {
-          pageName: '修改商品'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/Classify',
-      name: 'Classify',
-      component: Classify,
-      props: {
-        pageName: '商品分类'
+        pageName: '修改菜谱'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/Service',
-      name: 'Service',
-      component: Service,
+      path: 'PrefabricatedRecipes',
+      name: 'PrefabricatedRecipes',
+      component: PrefabricatedRecipes,
       props: {
-        pageName: '服务网点'
+        pageName: '出厂预制菜谱'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },
+    ]
+  },
+  {
+    path: '/Problems',
+    name: 'Problems',
+    component: Problems,
+    props: {
+      pageName: '常见问题'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Advertising',
+    name: 'Advertising',
+    component: Advertising,
+    props: {
+      pageName: '广告列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'AdvertisingAdd',
+      name: 'AdvertisingAdd',
+      component: AdvertisingAdd,
+      props: {
+        pageName: '发送消息'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }, {
+      path: 'AdvertisingEdit/:id/',
+      name: 'AdvertisingEdit',
+      component: AdvertisingEdit,
+      props: {
+        pageName: '查看详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    }]
+  },
+  {
+    path: '/User',
+    name: 'User',
+    component: User,
+    props: {
+      pageName: '用户列表'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'UserDetails/:id/',
+      name: 'UserDetails',
+      component: UserDetails,
+      props: {
+        pageName: '用户详情'
+      },
+      meta: {
+        requireAuth: true,
+      },
+    },]
+  },
+  {
+    path: '/UserAnalysis',
+    name: 'UserAnalysis',
+    component: UserAnalysis,
+    props: {
+      pageName: '用户分析'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/GuestBook',
+    name: 'GuestBook',
+    component: GuestBook,
+    props: {
+      pageName: '留言与反馈'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Comment',
+    name: 'Comment',
+    component: Comment,
+    props: {
+      pageName: '评论管理'
+    },
+    meta: {
+      requireAuth: true,
+    },
+  },
+  {
+    path: '/Information',
+    name: 'Information',
+    component: Information,
+    props: {
+      pageName: '消息通知'
+    },
+    meta: {
+      requireAuth: true,
+    },
+    children: [{
+      path: 'NewInformation',
+      name: 'NewInformation',
+      component: NewInformation,
+      props: {
+        pageName: '发送消息'
       },
       meta: {
         requireAuth: true,
       },
     },
     {
-      path: '/Supplier',
-      name: 'Supplier',
-      component: Supplier,
+      path: 'DetailsInformation/:id/',
+      name: 'DetailsInformation',
+      component: DetailsInformation,
       props: {
-        pageName: '代理商'
+        pageName: '查看详情'
       },
       meta: {
         requireAuth: true,
       },
-      children: [{
-          path: 'AddSupplier',
-          name: 'AddSupplier',
-          component: AddSupplier,
-          props: {
-            pageName: '添加代理商'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditSupplier/:id',
-          name: 'EditSupplier',
-          component: EditSupplier,
-          props: {
-            pageName: '修改代理商'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
+    }
+    ]
+  },
+  {
+    path: '/Temporary',
+    name: 'Temporary',
+    component: Temporary,
+    props: {
+      pageName: '数据采集'
     },
-    {
-      path: '/Distributor',
-      name: 'Distributor',
-      component: Distributor,
-      props: {
-        pageName: '供应商'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'AddDistributor',
-          name: 'AddDistributor',
-          component: AddDistributor,
-          props: {
-            pageName: '添加供应商'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditDistributor/:id',
-          name: 'EditDistributor',
-          component: EditDistributor,
-          props: {
-            pageName: '修改供应商'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/Administrator',
-      name: 'Administrator',
-      component: Administrator,
-      props: {
-        pageName: '管理员列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
+  },
+  {
+    path: '/lifeCycle',
+    name: 'lifeCycle',
+    props: {
+      pageName: '生命周期'
     },
-    {
-      path: '/MerchantSystem',
-      name: 'MerchantSystem',
-      component: MerchantSystem,
-      props: {
-        pageName: '商城设置'
-      },
-      meta: {
-        requireAuth: true,
-      },
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/System',
-      name: 'System',
-      component: System,
-      props: {
-        pageName: '系统设置'
-      },
-      meta: {
-        requireAuth: true,
-      },
+    component: lifeCycle,
+  },
+  {
+    path: '/menuAnalysis',
+    name: 'menuAnalysis',
+    props: {
+      pageName: '菜谱分析'
     },
-    {
-      path: '/SystemLog',
-      name: 'SystemLog',
-      component: SystemLog,
-      props: {
-        pageName: '系统日志'
-      },
-      meta: {
-        requireAuth: true,
-      },
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/Agreement',
-      name: 'Agreement',
-      component: Agreement,
-      props: {
-        pageName: '用户协议'
-      },
-      meta: {
-        requireAuth: true,
-      },
+    component: menuAnalysis,
+  },
+  {
+    path: '/remoteDiagnosis',
+    name: 'remoteDiagnosis',
+    props: {
+      pageName: '远程诊断'
     },
-    {
-      path: '/RoleManagement',
-      name: 'RoleManagement',
-      component: RoleManagement,
-      props: {
-        pageName: '角色管理'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'AddRole',
-          name: 'AddRole',
-          component: AddRole,
-          props: {
-            pageName: '添加角色'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditRole/:id/',
-          name: 'EditRole',
-          component: EditRole,
-          props: {
-            pageName: '修改角色'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
+    meta: {
+      requireAuth: true,
     },
-    {
-      path: '/CookbookClassify',
-      name: 'CookbookClassify',
-      component: CookbookClassify,
-      props: {
-        pageName: '菜谱分类'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/Cookbook',
-      name: 'Cookbook',
-      component: Cookbook,
-      props: {
-        pageName: '菜谱列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'AddCookbook',
-          name: 'AddCookbook',
-          component: AddCookbook,
-          props: {
-            pageName: '添加菜谱'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'EditCookbook/:id',
-          name: 'EditCookbook',
-          component: EditCookbook,
-          props: {
-            pageName: '修改菜谱'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'PrefabricatedRecipes',
-          name: 'PrefabricatedRecipes',
-          component: PrefabricatedRecipes,
-          props: {
-            pageName: '出厂预制菜谱'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-      ]
-    },
-    {
-      path: '/Problems',
-      name: 'Problems',
-      component: Problems,
-      props: {
-        pageName: '常见问题'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/Advertising',
-      name: 'Advertising',
-      component: Advertising,
-      props: {
-        pageName: '广告列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'AdvertisingAdd',
-        name: 'AdvertisingAdd',
-        component: AdvertisingAdd,
-        props: {
-          pageName: '发送消息'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, {
-        path: 'AdvertisingEdit/:id/',
-        name: 'AdvertisingEdit',
-        component: AdvertisingEdit,
-        props: {
-          pageName: '查看详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }]
-    },
-    {
-      path: '/User',
-      name: 'User',
-      component: User,
-      props: {
-        pageName: '用户列表'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-        path: 'UserDetails/:id/',
-        name: 'UserDetails',
-        component: UserDetails,
-        props: {
-          pageName: '用户详情'
-        },
-        meta: {
-          requireAuth: true,
-        },
-      }, ]
-    },
-    {
-      path: '/UserAnalysis',
-      name: 'UserAnalysis',
-      component: UserAnalysis,
-      props: {
-        pageName: '用户分析'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/GuestBook',
-      name: 'GuestBook',
-      component: GuestBook,
-      props: {
-        pageName: '留言与反馈'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/Comment',
-      name: 'Comment',
-      component: Comment,
-      props: {
-        pageName: '评论管理'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
-    {
-      path: '/Information',
-      name: 'Information',
-      component: Information,
-      props: {
-        pageName: '消息通知'
-      },
-      meta: {
-        requireAuth: true,
-      },
-      children: [{
-          path: 'NewInformation',
-          name: 'NewInformation',
-          component: NewInformation,
-          props: {
-            pageName: '发送消息'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        },
-        {
-          path: 'DetailsInformation/:id/',
-          name: 'DetailsInformation',
-          component: DetailsInformation,
-          props: {
-            pageName: '查看详情'
-          },
-          meta: {
-            requireAuth: true,
-          },
-        }
-      ]
-    },
-    {
-      path: '/Temporary',
-      name: 'Temporary',
-      component: Temporary,
-      props: {
-        pageName: '数据采集'
-      },
-      meta: {
-        requireAuth: true,
-      },
-    },
+    component: remoteDiagnosis,
+  },
   ]
 })
 
